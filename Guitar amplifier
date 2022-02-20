@@ -1,0 +1,67 @@
+desc: Guitar amplifier [MRMA]
+//tags: distortion amplifier
+//author: Make Russia Metal Again
+//this is a basic guitar amplifier
+slider1:gain_db=-12<-150,12,1>out gain (dB)
+slider2:in_gain_db=50<0,80,0.5>in gain (dB)
+
+import cookdsp.jsfx-inc
+
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+@init 
+max_in_gain=80;
+gain_factor=in_gain_db/max_in_gain;
+last_gain=10^(gain_db/20);
+last_in_gain=10^(in_gain_db/20);
+in_highpass_freq=50+in_gain_db*5;//Hz 
+in_lowpass_freq=10000-in_gain_db*100;//Hz  
+input_lowpass_left.lop(in_lowpass_freq);//left and right hp and lp filters
+input_highpass_left.buthp(in_highpass_freq);
+input_lowpass_right.lop(in_lowpass_freq);
+input_highpass_right.buthp(in_highpass_freq);
+input_left_lowshielf.eq(300, 0.6, -1*gain_factor, 1);
+input_right_lowshielf.eq(300,0.6,  -1*gain_factor,  1);
+output_left_lp.moog(9000, 0.8);
+output_right_lp.moog(9000, 0.8);
+function hard_clipper(insample)(max(-1.0, min(1.0, insample)));
+
+function saturation (x) (x/(abs(x)+1));
+
+
+
+@slider  
+last_gain=10^(gain_db/20);
+last_in_gain=10^(in_gain_db/20);
+gain_factor=in_gain_db/max_in_gain;
+in_highpass_freq=50+in_gain_db*5;//Hz 
+in_lowpass_freq=10000-in_gain_db*100;//Hz
+input_lowpass_left.lop_set_freq(in_lowpass_freq);//update freq when gain changes
+input_highpass_left.buthp_set_freq(in_highpass_freq);
+input_lowpass_right.lop_set_freq(in_lowpass_freq);
+input_highpass_right.buthp_set_freq(in_highpass_freq);
+input_left_lowshielf.eq_set_boost(  -1.3*gain_factor);
+input_right_lowshielf.eq_set_boost(-1.3*gain_factor); 
+//output_left_peak.eq_set_boost(30*gain_factor);
+//output_right_peak.eq_set_boost(30 *gain_factor);
+
+@sample
+ 
+insample_left=input_highpass_left.buthp_do(input_lowpass_left.lop_do(spl0));
+insample_right=input_highpass_right.buthp_do(input_lowpass_right.lop_do(spl1)); 
+insample_left=input_left_lowshielf.eq_do(insample_left);
+insample_right=input_right_lowshielf.eq_do(insample_right);
+insample_left=saturation(insample_left*last_in_gain);
+insample_right=saturation(insample_right*last_in_gain);
+outsample_left=output_left_lp.moog_do(insample_left);
+outsample_right=output_right_lp.moog_do(insample_right); 
+
+//outsample_left=insample_left;
+//outsample_right=insample_right; 
+
+spl0=hard_clipper(last_gain*outsample_left);
+spl1=hard_clipper(last_gain*outsample_right);
+
