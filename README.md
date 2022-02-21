@@ -2,7 +2,7 @@
 My JSFX plugins
 # Installation
 Go Reaper->Options->Show Reaper resource path in explorer/finder then open the folder "Effects". Then just drop these files here. May be I'll add ReaPack support later.
-Also, you need to install two libraries. Cookdsp library (download from here http://ajaxsoundstudio.com/software/cookdsp/ or https://github.com/belangeo/cookdsp) and geraintluff library for GUI (link for ReaPack - https://raw.githubusercontent.com/geraintluff/jsfx-ui-lib/master/ui-lib.jsfx-inc , direct clink to code - https://stash.reaper.fm/v/32955/ui-lib.zip)
+Also, you need to install two libraries. Cookdsp library (download from here http://ajaxsoundstudio.com/software/cookdsp/ or https://github.com/belangeo/cookdsp) and geraintluff library for GUI (link for ReaPack - https://raw.githubusercontent.com/geraintluff/jsfx-ui-lib/master/ui-lib.jsfx-inc , direct link to code - https://stash.reaper.fm/v/32955/ui-lib.zip)
 ## Guitar amplifier
 This plugin is a simple waveshaping distortion + some EQ for input and output signals to make it sound like a default metal amp. 
 Of course, I took some general ideas from other amplifier plugins.
