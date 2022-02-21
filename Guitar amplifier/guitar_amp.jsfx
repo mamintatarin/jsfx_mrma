@@ -1,0 +1,175 @@
+ desc: Guitar amplifier [MRMA]
+//tags: distortion amplifier
+//author: Make Russia Metal Again
+//this is a basic guitar amplifier
+slider1:gain_db=-6<-150,12,1>-out gain (dB)
+slider2:in_gain_db=70<0,80,0.5>-in gain (dB)
+slider3:low_tone=0<-100,100,1>-low tone (%)
+slider4:mid_tone=0<-100,100,1>-mid tone (%)
+slider5:high_tone=0<-100,100,1>-high tone (%)
+import cookdsp.jsfx-inc
+import ui-lib.jsfx-inc
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+@init 
+
+freemem = ui_setup(0);
+max_in_gain=80;
+gain_factor=in_gain_db/max_in_gain;
+last_gain=10^(gain_db/20);
+last_in_gain=10^(in_gain_db/20);
+in_highpass_freq=50+gain_factor*300;//Hz 
+in_lowpass_freq=10000-gain_factor*7000;//Hz  
+input_lowpass_left.butlp(in_lowpass_freq);//left and right hp and lp filters
+input_highpass_left.buthp(in_highpass_freq);
+input_lowpass_right.butlp(in_lowpass_freq);
+input_highpass_right.buthp(in_highpass_freq);
+input_left_lowshielf.eq(350, 0.6, -10*gain_factor, 1);
+input_right_lowshielf.eq(350,0.6,  -10*gain_factor,  1);
+output_left_lp.moog(9000, 0.7); 
+output_right_lp.moog(9000, 0.7);
+
+output_tone.left.low.eq(350, 0.25 + abs(low_tone/100)  * 1.0, -2 + (low_tone/100)  * 4.5,1);
+output_tone.right.low.eq(350, 0.25 + abs(low_tone/100)  * 1.0, -2 + (low_tone/100)  * 4.5,1);
+output_tone.left.mid.eq(750, 0.5 + abs(mid_tone/100)  * 1.0, 0 + (mid_tone/100)  * 4.5,0);
+output_tone.right.mid.eq(750, 0.5 + abs(mid_tone/100)  * 1.0, 0 + (mid_tone/100)  * 4.5,0);
+output_tone.left.high.eq(2500, 0.2 + abs(high_tone/100)  * 0.5, 0 + (high_tone/100)  * 6,2);
+output_tone.right.high.eq(2500, 0.2 + abs(high_tone/100)  * 0.5, 0 + (high_tone/100)  * 6,2);
+
+
+function hard_clipper(insample)(max(-1.0, min(1.0, insample)));
+
+function saturation (x) (x/(abs(x)+1));
+
+
+
+@slider
+
+last_gain=10^(gain_db/20);
+last_in_gain=10^(in_gain_db/20);
+gain_factor=in_gain_db/max_in_gain;
+in_highpass_freq=50+gain_factor*300;//Hz 
+in_lowpass_freq=10000-gain_factor*7000;//Hz  
+input_lowpass_left.butlp_set_freq(in_lowpass_freq);//update freq when gain changes
+input_highpass_left.buthp_set_freq(in_highpass_freq);
+input_lowpass_right.butlp_set_freq(in_lowpass_freq);
+input_highpass_right.buthp_set_freq(in_highpass_freq);
+input_left_lowshielf.eq_set_boost(  -10*gain_factor);
+input_right_lowshielf.eq_set_boost(-10*gain_factor); 
+
+output_tone.left.low.eq_set_boost( -1 + (low_tone/100)  * 4.5);
+output_tone.right.low.eq_set_boost( -1 + (low_tone/100)  * 4.5);
+output_tone.left.mid.eq_set_boost(0 + (mid_tone/100)  * 4.5);
+output_tone.right.mid.eq_set_boost( 0 + (mid_tone/100)  * 4.5);
+output_tone.left.high.eq_set_boost(0 + (high_tone/100)  * 6);
+output_tone.right.high.eq_set_boost(0 + (high_tone/100)  * 6);
+
+@sample
+ 
+insample_left=input_highpass_left.buthp_do(input_lowpass_left.butlp_do(spl0));
+insample_right=input_highpass_right.buthp_do(input_lowpass_right.butlp_do(spl1)); 
+insample_left=input_left_lowshielf.eq_do(insample_left);
+insample_right=input_right_lowshielf.eq_do(insample_right);
+insample_left=saturation(insample_left*last_in_gain);
+insample_right=saturation(insample_right*last_in_gain);
+outsample_left=output_left_lp.moog_do(insample_left);
+outsample_right=output_right_lp.moog_do(insample_right); 
+outsample_left=output_tone.left.low.eq_do(output_tone.left.mid.eq_do(output_tone.left.high.eq_do(outsample_left)));
+outsample_right=output_tone.right.low.eq_do(output_tone.right.mid.eq_do(output_tone.right.high.eq_do(outsample_right)));
+//outsample_left=insample_left;
+//outsample_right=insample_right; 
+
+spl0=hard_clipper(last_gain*outsample_left);
+spl1=hard_clipper(last_gain*outsample_right);
+
+
+@gfx
+ui_start("main");
+ui_screen() == "main" ? (
+  old_gain_db!=gain_db ? (
+    old_gain_db=gain_db;
+    sliders_updated=1;
+  );
+  old_in_gain_db!=in_gain_db ? (
+      old_in_gain_db=in_gain_db;
+      sliders_updated=1;
+    );
+  old_low_tone!=low_tone? (
+        old_low_tone=low_tone;
+        sliders_updated=1;
+      );
+  old_mid_tone!=mid_tone? (
+          old_mid_tone=mid_tone;
+          sliders_updated=1;
+        );
+  old_high_tone!=high_tone? (
+          old_high_tone=high_tone;
+          sliders_updated=1;
+        );
+    
+  ui_split_leftratio(0.5);
+    control_group("GAIN");
+      ui_split_leftratio(0.5);
+      ui_align(0.5,0.5);
+      gain_db=control_dial_left(gain_db, -150, 12,0,-6);
+      ui_align(0.5,0.85);
+      ui_color(0, 0, 0);
+      ui_text("Output (db)");
+      ui_pop();
+     
+      ui_align(0.5,0.5);
+      in_gain_db=control_dial_left(in_gain_db, 0, 80,0,70);
+      ui_align(0.5,0.85);
+      ui_color(0, 0, 0);
+      ui_text("Input (db)");
+      ui_pop();
+  
+  
+  
+    control_group("TONE");
+    ui_split_topratio(1/3);
+      ui_split_left(70);
+        ui_text("Low");
+      ui_pop();
+      low_tone = control_slider_left(low_tone, -100, 100, 0, 0);
+    ui_split_next();
+      ui_split_left(70);
+        ui_text("Mid");
+      ui_pop();
+      mid_tone = control_slider_left(mid_tone, -100, 100, 0, 0);
+    ui_split_next();
+      ui_split_left(70);
+        ui_text("High");
+      ui_pop();
+      high_tone = control_slider_left(high_tone, -100, 100, 0, 0);
+    ui_pop();
+  
+
+    
+    
+    
+  sliders_updated?(
+    last_gain=10^(gain_db/20);
+    last_in_gain=10^(in_gain_db/20);
+    gain_factor=in_gain_db/max_in_gain;
+    in_highpass_freq=50+gain_factor*300;//Hz 
+    in_lowpass_freq=10000-gain_factor*7000;//Hz  
+    input_lowpass_left.butlp_set_freq(in_lowpass_freq);//update freq when gain changes
+    input_highpass_left.buthp_set_freq(in_highpass_freq);
+    input_lowpass_right.butlp_set_freq(in_lowpass_freq);
+    input_highpass_right.buthp_set_freq(in_highpass_freq);
+    input_left_lowshielf.eq_set_boost(  -10*gain_factor);
+    input_right_lowshielf.eq_set_boost(-10*gain_factor); 
+    
+    output_tone.left.low.eq_set_boost( -1 + (low_tone/100)  * 4.5);
+    output_tone.right.low.eq_set_boost( -1 + (low_tone/100)  * 4.5);
+    output_tone.left.mid.eq_set_boost(0 + (mid_tone/100)  * 4.5);
+    output_tone.right.mid.eq_set_boost( 0 + (mid_tone/100)  * 4.5);
+    output_tone.left.high.eq_set_boost(0 + (high_tone/100)  * 6);
+    output_tone.right.high.eq_set_boost(0 + (high_tone/100)  * 6);
+    sliders_updated=0;
+  );
+):ui_system();
