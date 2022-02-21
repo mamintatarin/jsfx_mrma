@@ -86,7 +86,7 @@ spl0=hard_clipper(last_gain*outsample_left);
 spl1=hard_clipper(last_gain*outsample_right);
 
 
-@gfx
+@gfx 500 250
 ui_start("main");
 ui_screen() == "main" ? (
   old_gain_db!=gain_db ? (
