@@ -12,4 +12,4 @@ This button sets the amount of input gain (before the waveshaper). The input sig
 ### Output gain
 This button sets the amount of output gain (after the waveshaper). Again, it's applied to a waveshaped signal with some fixed EQ + tune EQ that you can control.
 ### Tune
-Here we have three sliders to control some low,mid and high character. 
+Here we have three sliders to control some low, mid and high character. 
