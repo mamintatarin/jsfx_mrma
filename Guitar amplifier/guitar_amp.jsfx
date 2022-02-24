@@ -1,8 +1,9 @@
- desc: Guitar amplifier [MRMA]
+desc: Guitar amplifier [MakeRussiaMetalAgain]
 //tags: distortion amplifier
 //author: Make Russia Metal Again
 //this is a basic guitar amplifier
-slider1:gain_db=-6<-150,12,1>-out gain (dB)
+//youtube : Make Russia Metal Again
+slider1:gain_db=-6<-40,12,1>-out gain (dB)
 slider2:in_gain_db=70<0,80,0.5>-in gain (dB)
 slider3:low_tone=0<-100,100,1>-low tone (%)
 slider4:mid_tone=0<-100,100,1>-mid tone (%)
@@ -86,7 +87,7 @@ spl0=hard_clipper(last_gain*outsample_left);
 spl1=hard_clipper(last_gain*outsample_right);
 
 
-@gfx 500 250
+@gfx 500 300
 ui_start("main");
 ui_screen() == "main" ? (
   old_gain_db!=gain_db ? (
@@ -114,7 +115,7 @@ ui_screen() == "main" ? (
     control_group("GAIN");
       ui_split_leftratio(0.5);
       ui_align(0.5,0.5);
-      gain_db=control_dial_left(gain_db, -150, 12,0,-6);
+      gain_db=control_dial_left(gain_db, -40, 12,0,-6);
       ui_align(0.5,0.85);
       ui_color(0, 0, 0);
       ui_text("Output (db)");
