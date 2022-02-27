@@ -41,8 +41,6 @@ output_tone.left.high.eq(2500, 0.2 + abs(high_tone/100)  * 0.5, 0 + (high_tone/1
 output_tone.right.high.eq(2500, 0.2 + abs(high_tone/100)  * 0.5, 0 + (high_tone/100)  * 6,2);
 
 
-function hard_clipper(insample)(max(-1.0, min(1.0, insample)));
-
 function saturation (x) (x/(abs(x)+1));
 
 
