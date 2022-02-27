@@ -83,8 +83,8 @@ outsample_right=output_tone.right.low.eq_do(output_tone.right.mid.eq_do(output_t
 //outsample_left=insample_left;
 //outsample_right=insample_right; 
 
-spl0=hard_clipper(last_gain*outsample_left);
-spl1=hard_clipper(last_gain*outsample_right);
+spl0=last_gain*outsample_left;
+spl1=last_gain*outsample_right;
 
 
 @gfx 500 300
