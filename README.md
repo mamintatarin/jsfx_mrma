@@ -12,6 +12,6 @@ Please, use it before IR loader, e.g. convolution Cabinet Sim (default Reaper pl
 ### Input gain
 This button sets the amount of input gain (before the waveshaper). The input signal is not the same as your sound before the plugin: it goes through some EQ first.
 ### Output gain
-This button sets the amount of output gain (after the waveshaper). Again, it's applied to a waveshaped signal with some fixed EQ + tune EQ that you can control.
+This button sets the amount of output gain (after the waveshaper). Again, it's applied to a waveshaped signal with some fixed EQ + tune EQ that you can control. Be careful with that since there is no hardclipper at the end of the plugin - you should control clipping by looking at the output indicator.
 ### Tune
 Here we have three sliders to control some low, mid and high character. 
