@@ -6,7 +6,7 @@ Also, you need to install two libraries. Cookdsp library (download from here htt
 ## Guitar amplifier
 This plugin is a simple waveshaping distortion + some EQ for input and output signals to make it sound like a default metal amp. 
 Of course, I took some general ideas from other amplifier plugins.
-Please, use it before IR loader, e.g. convolution Cabinet Sim (default Reaper plugin)
+Please, use it before IR loader, e.g. convolution Cabinet Sim (default Reaper plugin). You can use a compressor between this plugin and cab.
 ![(A)GAIN](https://user-images.githubusercontent.com/42464672/156014294-a1d5e1bf-1bac-40bf-bf03-4dfe62353d3e.jpg)
 
 ### Input gain
