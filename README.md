@@ -7,7 +7,8 @@ Also, you need to install two libraries. Cookdsp library (download from here htt
 This plugin is a simple waveshaping distortion + some EQ for input and output signals to make it sound like a default metal amp. 
 Of course, I took some general ideas from other amplifier plugins.
 Please, use it before IR loader, e.g. convolution Cabinet Sim (default Reaper plugin). You can use a compressor between this plugin and cab.
-![(A)GAIN](https://user-images.githubusercontent.com/42464672/156014294-a1d5e1bf-1bac-40bf-bf03-4dfe62353d3e.jpg)
+![изображение](https://user-images.githubusercontent.com/42464672/156220663-e1555226-5ad0-46a2-8924-35f57aa3c6ff.png)
+
 
 ### Input gain
 This button sets the amount of input gain (before the waveshaper). The input signal is not the same as your sound before the plugin: it goes through some EQ first.
