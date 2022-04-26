@@ -16,3 +16,27 @@ This button sets the amount of input gain (before the waveshaper). The input sig
 This button sets the amount of output gain (after the waveshaper). Again, it's applied to a waveshaped signal with some fixed EQ + tune EQ that you can control. Be careful with that since there is no hardclipper at the end of the plugin - you should control clipping by looking at the output indicator.
 ### Tune
 Here we have three sliders to control some low, mid and high character. 
+
+## Auto-growl
+This plugins adds artificial "growling" to your voice in a such way: it track your voice's note using Yin algorithm, then modulates it with a sine wave. There are different harmonics you can use for modulation: octave down (sine frequency is 2 times less than your voice's frequency), 7 semintones down, two octaves down, 12+7 semitones down.
+### Tolerance (in)
+Yin algorithm parameter, meaning note sensivity while traking
+### Minimum estimated frequency (in)
+Yin algorithm parameter, meaning the lowest note possible
+### Maximum estimated frequency (in)
+Yin algorithm parameter, meaning the highest note possible
+### Pre-analysis lowpass cutoff
+Yin algorithm parameter, internal lowpass for the input signal to reduce unnesessary part of the signal.
+### Window size
+Yin algorithm parameter, the highest value leads to better averaging of the note, but adds lattency and reduces sensivity
+### Octave down modulation
+Add a signal modulated by frequency of your voice, multiplied by 0.5
+### Fifth down modulation
+Add a signal modulated by frequency of your voice, multiplied by 2/3
+### Two octaves down modulation
+Add a signal modulated by frequency of your voice, multiplied by 0.25
+### Octave plus fifth down modulation
+Add a signal modulated by frequency of your voice, multiplied by 1/3
+### Relative frequency tolerance (out)
+Yin algorithm's output is your voice's note. This parameter means sensivity to this note.
+

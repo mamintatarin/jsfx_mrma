@@ -1,0 +1,57 @@
+desc:Auto-growl [Make Russia Metal Again]
+//This plugin adds some artificial growl to your vocals
+//by adding ring modulation with frequency, proportional to your voice's note
+import cookdsp.jsfx-inc
+
+slider1:0.2<0,1,0.05>Tolerance (in)
+slider2:40<20, 500>Minimum Estimated Frequency
+slider3:1000<500, 5000>Maximum Estimated Frequency
+slider4:1000<20, 5000>Pre-Analysis Lowpass Cutoff
+slider5:1<0,4,1{512,1024,2048,4096,8192}>Window Size
+slider6:0<0,1,0.05>Octave down modulation
+slider7:0<0,1,0.05>Fifth down modulation
+slider8:0<0,1,0.05>Two octaves down modulation
+slider9:0<0,1,0.05>Octave plus fifth down modulation
+slider10:0.8<0,1,0.05>Dry signal
+slider11:0.05<0,0.2>Relative frequency tolerance (out)
+
+@init
+// Compute the size as a power of two
+size = pow(2, slider5+9);
+// Initializes the pitch follower
+pit.yin(slider1, slider2, slider3, slider4, size);
+rm_oct_down.sine(0, 0);
+rm_five_down.sine(0, 0);
+rm_two_oct_down.sine(0, 0);
+rm_oct_five_down.sine(0, 0);
+@slider
+pit.yin_set_tolerance(slider1);
+pit.yin_set_minfreq(slider2);
+pit.yin_set_maxfreq(slider3);
+pit.yin_set_cutoff(slider4);
+size = pow(2, slider5+9);
+pit.yin_set_size(size);
+
+@sample
+// Analyse mixed channels
+freq = pit.yin_do((spl0+spl1)*0.707);
+abs(prev_freq-freq)>=freq*slider11 ? (
+    prev_freq = freq;
+    rm_oct_down.sine_set_freq(prev_freq/2);
+    rm_five_down.sine_set_freq(2*prev_freq/3);
+    rm_two_oct_down.sine_set_freq(prev_freq/4);
+    rm_oct_five_down.sine_set_freq(1*prev_freq/3);
+);
+
+oct_down_multiplier = rm_oct_down.sine_do();
+five_down_multiplier = rm_five_down.sine_do();
+two_oct_down_multiplier = rm_two_oct_down.sine_do();
+oct_five_down_multiplier = rm_oct_five_down.sine_do();
+
+modulation = oct_down_multiplier*slider6 + 
+             five_down_multiplier*slider7 + 
+             two_oct_down_multiplier*slider8 + 
+             oct_five_down_multiplier*slider9;
+
+spl0=spl0*(slider10 + modulation);
+spl1=spl1*(slider10 + modulation);
