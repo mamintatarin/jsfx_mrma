@@ -19,6 +19,8 @@ Here we have three sliders to control some low, mid and high character.
 
 ## Auto-growl
 This plugins adds artificial "growling" to your voice in a such way: it track your voice's note using Yin algorithm, then modulates it with a sine wave. There are different harmonics you can use for modulation: octave down (sine frequency is 2 times less than your voice's frequency), 7 semintones down, two octaves down, 12+7 semitones down.
+![autogrowl](https://user-images.githubusercontent.com/42464672/165327284-d736546a-bc82-4579-8d35-2405a0d8eea2.jpg)
+
 ### Tolerance (in)
 Yin algorithm parameter, meaning note sensivity while traking
 ### Minimum estimated frequency (in)
