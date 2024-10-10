@@ -18,7 +18,7 @@ This button sets the amount of output gain (after the waveshaper). Again, it's a
 Here we have three sliders to control some low, mid and high character. 
 
 ## Auto-growl
-This plugins adds artificial "growling" to your voice in a such way: it tracks your voice's note using Yin algorithm, then modulates it with a sine wave. There are different harmonics you can use for modulation: octave down (sine frequency is 2 times less than your voice's frequency), 7 semintones down, two octaves down, 12+7 semitones down.
+This plugins adds artificial "growling" to your voice in a such way: it tracks your voice's note using Yin algorithm, then modulates it with a sine wave. There are different harmonics you can use for modulation: octave down (sine frequency is 2 times less than your voice's frequency), 7 semintones down, two octaves down, 12+7 semitones down. Generally, you should only use it on vowels.
 ![autogrowl](https://user-images.githubusercontent.com/42464672/165327284-d736546a-bc82-4579-8d35-2405a0d8eea2.jpg)
 
 ### Tolerance (in)
