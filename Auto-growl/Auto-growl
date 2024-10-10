@@ -1,4 +1,4 @@
-desc:Auto-growl [Make Russia Metal Again]
+desc:Auto-growl [mamintatarin]
 //This plugin adds some artificial growl to your vocals
 //by adding ring modulation with frequency, proportional to your voice's note
 import cookdsp.jsfx-inc
